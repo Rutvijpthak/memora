@@ -117,7 +117,7 @@ Every photo is scored across multiple dimensions simultaneously:
 
 ## 🔐 Privacy Policy
 
-Memora takes privacy seriously:
+Memora takes privacy **seriously**:
 
 - ✅ All processing happens locally on your device
 - ✅ No photos are ever uploaded to any server
