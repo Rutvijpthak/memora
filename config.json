@@ -1,0 +1,8 @@
+{
+  "version": "3.0.0",
+  "min_version": "3.0.0",
+  "is_free": true,
+  "download_win": "https://github.com/YOUR_USERNAME/memora/releases/latest/download/Memora_Windows.zip",
+  "download_mac": "https://github.com/YOUR_USERNAME/memora/releases/latest/download/Memora_Mac.zip",
+  "message": ""
+}
