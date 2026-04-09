@@ -40,7 +40,7 @@ jobs:
             --hidden-import tensorflow `
             --hidden-import keras `
             --clean --noconfirm `
-            memora_brand_final.py
+            memora_complete.py
 
       - name: Zip Windows build
         run: |
@@ -84,7 +84,7 @@ jobs:
             --hidden-import tensorflow \
             --hidden-import keras \
             --clean --noconfirm \
-            memora_brand_final.py
+           memora_complete.py
 
       - name: Remove quarantine flag
         run: xattr -cr dist/Memora.app || true
