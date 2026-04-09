@@ -1,0 +1,133 @@
+name: Build Memora
+
+on:
+  push:
+    tags:
+      - 'v*'   # Triggers on version tags like v3.0.0, v3.1.0
+
+jobs:
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install opencv-python Pillow numpy imagehash scikit-learn
+          pip install deepface onnxruntime tensorflow keras
+          pip install pyinstaller
+
+      - name: Build Windows exe
+        run: |
+          pyinstaller --name "Memora" --windowed --onedir `
+            --icon memora_icon_brand.ico `
+            --hidden-import cv2 `
+            --hidden-import PIL `
+            --hidden-import PIL.ExifTags `
+            --hidden-import sklearn `
+            --hidden-import imagehash `
+            --hidden-import numpy `
+            --hidden-import scipy `
+            --hidden-import PyWavelets `
+            --hidden-import deepface `
+            --hidden-import onnxruntime `
+            --hidden-import tensorflow `
+            --hidden-import keras `
+            --clean --noconfirm `
+            memora_brand_final.py
+
+      - name: Zip Windows build
+        run: |
+          Compress-Archive -Path dist/Memora -DestinationPath Memora_Windows.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Memora_Windows
+          path: Memora_Windows.zip
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip3 install opencv-python Pillow numpy imagehash scikit-learn
+          pip3 install deepface onnxruntime tensorflow keras
+          pip3 install pyinstaller
+
+      - name: Build Mac app
+        run: |
+          pyinstaller --name "Memora" --windowed --onedir \
+            --hidden-import cv2 \
+            --hidden-import PIL \
+            --hidden-import PIL.ExifTags \
+            --hidden-import sklearn \
+            --hidden-import imagehash \
+            --hidden-import numpy \
+            --hidden-import scipy \
+            --hidden-import PyWavelets \
+            --hidden-import deepface \
+            --hidden-import onnxruntime \
+            --hidden-import tensorflow \
+            --hidden-import keras \
+            --clean --noconfirm \
+            memora_brand_final.py
+
+      - name: Remove quarantine flag
+        run: xattr -cr dist/Memora.app || true
+
+      - name: Zip Mac build
+        run: zip -r Memora_Mac.zip dist/Memora.app
+
+      - name: Upload Mac artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Memora_Mac
+          path: Memora_Mac.zip
+
+  create-release:
+    needs: [build-windows, build-mac]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: Memora_Windows
+
+      - name: Download Mac build
+        uses: actions/download-artifact@v4
+        with:
+          name: Memora_Mac
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Memora_Windows.zip
+            Memora_Mac.zip
+          body: |
+            ## Memora ${{ github.ref_name }}
+
+            ### Download
+            - **Windows**: Download `Memora_Windows.zip`, unzip, double-click `Memora.exe`
+            - **Mac**: Download `Memora_Mac.zip`, unzip, right-click `Memora.app` → Open
+
+            ### What's new
+            See commit history for changes in this release.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
