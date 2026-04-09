@@ -121,7 +121,7 @@ def _set_icon(win):
 
 # ── Registration ──────────────────────────────────────────────────────────────
 REG_FILE     = str(Path.home() / ".memora_reg")
-SHEETS_URL   = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec"
+SHEETS_URL   = "%%SHEETS_URL%%"  # injected at build time
 HEARD_OPTIONS = [
     "Select one…",
     "WhatsApp / Telegram",
@@ -1227,7 +1227,7 @@ class Memora(tk.Tk):
 APP_VERSION  = "3.0.0"
 CONFIG_URL   = (
     "https://raw.githubusercontent.com/"
-    "Rutvijpthak/memora/main/config.json"
+    "YOUR_USERNAME/memora/main/config.json"
 )
 
 def _parse_version(v):
