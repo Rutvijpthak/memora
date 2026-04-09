@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - 'v*'   # Triggers on version tags like v3.0.0, v3.1.0
-
+permissions:
+  contents: write
 jobs:
 
   build-windows:
