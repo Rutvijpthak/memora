@@ -3,9 +3,11 @@ name: Build Memora
 on:
   push:
     tags:
-      - 'v*'   # Triggers on version tags like v3.0.0, v3.1.0
+      - 'v*'
+
 permissions:
   contents: write
+
 jobs:
 
   build-windows:
@@ -22,7 +24,15 @@ jobs:
         run: |
           pip install opencv-python Pillow numpy imagehash scikit-learn
           pip install deepface onnxruntime tensorflow keras
-          pip install pyinstaller
+          pip install pyinstaller scipy PyWavelets
+
+      - name: Inject secrets
+        run: |
+          python -c "
+          content = open('memora_complete.py').read()
+          content = content.replace('%%SHEETS_URL%%', '${{ secrets.SHEETS_URL }}')
+          open('memora_complete.py', 'w').write(content)
+          "
 
       - name: Build Windows exe
         run: |
@@ -44,8 +54,7 @@ jobs:
             memora_complete.py
 
       - name: Zip Windows build
-        run: |
-          Compress-Archive -Path dist/Memora -DestinationPath Memora_Windows.zip
+        run: Compress-Archive -Path dist/Memora -DestinationPath Memora_Windows.zip
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
@@ -67,7 +76,15 @@ jobs:
         run: |
           pip3 install opencv-python Pillow numpy imagehash scikit-learn
           pip3 install deepface onnxruntime tensorflow keras
-          pip3 install pyinstaller
+          pip3 install pyinstaller scipy PyWavelets
+
+      - name: Inject secrets
+        run: |
+          python3 -c "
+          content = open('memora_complete.py').read()
+          content = content.replace('%%SHEETS_URL%%', '${{ secrets.SHEETS_URL }}')
+          open('memora_complete.py', 'w').write(content)
+          "
 
       - name: Build Mac app
         run: |
@@ -85,13 +102,10 @@ jobs:
             --hidden-import tensorflow \
             --hidden-import keras \
             --clean --noconfirm \
-           memora_complete.py
-
-      - name: Remove quarantine flag
-        run: xattr -cr dist/Memora.app || true
+            memora_complete.py
 
       - name: Zip Mac build
-        run: zip -r Memora_Mac.zip dist/Memora.app
+        run: zip -r Memora_Mac.zip dist/Memora
 
       - name: Upload Mac artifact
         uses: actions/upload-artifact@v4
@@ -126,9 +140,9 @@ jobs:
 
             ### Download
             - **Windows**: Download `Memora_Windows.zip`, unzip, double-click `Memora.exe`
-            - **Mac**: Download `Memora_Mac.zip`, unzip, right-click `Memora.app` → Open
+            - **Mac**: Download `Memora_Mac.zip`, unzip, right-click `Memora` → Open
 
-            ### What's new
-            See commit history for changes in this release.
+            ### Installation note
+            Windows may show a security warning — click "More info" → "Run anyway"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
