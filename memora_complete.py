@@ -1227,7 +1227,7 @@ class Memora(tk.Tk):
 APP_VERSION  = "3.0.0"
 CONFIG_URL   = (
     "https://raw.githubusercontent.com/"
-    "YOUR_USERNAME/memora/main/config.json"
+    "Rutvijpthak/memora/main/config.json"
 )
 
 def _parse_version(v):
