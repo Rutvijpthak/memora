@@ -128,44 +128,15 @@ Memora takes privacy **seriously**:
 - ❌ No file names or folder paths are collected
 - ❌ No facial recognition data is stored or transmitted
 
----
-
-## 📊 What Memora Analyses
-
-```
-For every photo Memora calculates:
-
-Sharpness Score      ████████░░  Centre-weighted blur detection
-Exposure Score       ███████░░░  Too dark / too bright detection  
-Face Presence        █████░░░░░  Number of faces detected
-Emotion Score        ████░░░░░░  Happiness % via DeepFace AI
-Resolution Score     ███░░░░░░░  Megapixel quality rating
-
-Combined Score  →  Best photos selected  →  Album ready
-```
 
 ---
 
 ## 🆕 What's New in v3.0.0
 
-- Brand new UI with Navy / Gold / Aqua / Teal design system
-- Adobe-style splash screen on launch
-- Registration system for early users
-- Automatic update checker — always know when new version is available
 - Support for 20+ image formats including all major RAW formats
 - Emotion scoring using DeepFace AI
 - Timeline diversity algorithm
 - Perceptual hash duplicate detection
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Batch processing multiple events
-- [ ] Custom album templates
-- [ ] Direct Google Photos export
-- [ ] Face grouping and guest coverage reports
-- [ ] Mobile companion app
 
 ---
 
